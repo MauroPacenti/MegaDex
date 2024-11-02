@@ -4,9 +4,13 @@ package com.restart.controller;
 import com.restart.dto.UserDto;
 import com.restart.service.UserServiceImpl;
 import com.restart.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,9 +42,11 @@ public class UserController {
     }
 
     @DeleteMapping("auth/deleteSelf")
-    public ResponseEntity<Void> deleteSelf() {
+    public ResponseEntity<Void> deleteSelf(HttpServletRequest request, HttpServletResponse response) {
         User user = userService.getAuthenticatedUser();
         userService.deleteUserById(user.getId());
+        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+        logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
             return ResponseEntity.ok().build();
 
     }
@@ -57,11 +63,12 @@ public class UserController {
     }
 
     @PutMapping("auth/updateSelf")
-    public ResponseEntity<UserDto> updateSelf(@RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateSelf(@RequestBody UserDto userDto, HttpServletRequest request, HttpServletResponse response) {
         User user = userService.getAuthenticatedUser();
         userDto.setId(user.getId());
 
-        if(userService.findUserByEmail(userDto.getEmail()) != user){
+        if(userService.findUserByEmail(userDto.getEmail()) != user
+        && userService.findUserByEmail(userDto.getEmail()) != null){
             return ResponseEntity.status(HttpStatus.NOT_MODIFIED) // 304
                     .body(userDto);
         }
@@ -75,6 +82,10 @@ public class UserController {
         }
         try {
             userService.updateSelf(userDto);
+
+            SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+            logoutHandler.logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+
             return ResponseEntity.ok(userDto);
         } catch (Exception e) {
             return ResponseEntity.noContent().build();
