@@ -101,7 +101,11 @@ public class UserServiceImpl implements UserService {
     //Metodo per cercare l'utente tramite email
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        try {
+            return userRepository.findByEmail(email);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

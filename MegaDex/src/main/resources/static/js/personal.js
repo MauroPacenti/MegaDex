@@ -55,7 +55,8 @@ function editSelf(){
         })
             .then(response => {
                 if (response.ok) {
-                    alert("Modifica avvenuta con successo!");
+                    alert("Modifica avvenuta con successo!" +
+                        "Effettua nuovamente il login per favore");
                     window.location.href = "http://localhost:8080/personal.html";
                 }
                 if(response.status === 403){
@@ -93,7 +94,7 @@ function deleteUser() {
         .then(response => {
             if (response.ok) {
                 alert("Eliminazione avvenuta con successo!");
-                window.location.href = "http://localhost:8080/logout";
+                window.location.href = "http://localhost:8080/personal.html";
             }
         })
         .catch(error => {
