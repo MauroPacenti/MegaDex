@@ -320,6 +320,8 @@ input[type="checkbox"] {
 
 #deckbuilder {
     width: 60%;
+    max-width: 990px;
+    min-width: 798px;
     position: absolute;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
@@ -328,6 +330,7 @@ input[type="checkbox"] {
 }
 
 #selected-card-list {
+    width: 325px;
     list-style-type: none;
     padding: 0;
     
@@ -479,7 +482,7 @@ input[type="checkbox"] {
     transition: 0.3s ease-in;
 }
 .sidebar {
-    display: flex;
+
     flex-direction: column;
     width: 100%;
     margin-left: 70%;

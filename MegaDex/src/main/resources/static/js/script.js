@@ -285,6 +285,7 @@ async function searchCards(page = 1) {
 	    const params = new URLSearchParams({
 	        name: name,
 	        type: type,
+            size: 100,
 	        subtype: subtype,
 	        supertype: supertype,
 	        set: release,

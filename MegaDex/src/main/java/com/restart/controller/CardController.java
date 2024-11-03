@@ -3,6 +3,7 @@ package com.restart.controller;
 
 
 import com.restart.entity.Card;
+import com.restart.service.CardServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +32,11 @@ public class CardController {
         @RequestParam(required = false) String subtype,
         @RequestParam(required = false) String set,
         @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "20") int size,
         @RequestParam(defaultValue = "Id") String orderBy,
         @RequestParam(defaultValue = "asc") String direction) 
     {
-
+        CardServiceImpl.setPageSize(size);
         // Chiama il servizio per recuperare le carte filtrate e i dati di paginazione
         CardDto response = service.getFilteredCards(Id, name, supertype, type, subtype, set, page, orderBy, direction);
         // Restituisce la risposta con lo stato HTTP 200 (OK)
@@ -50,13 +52,14 @@ public class CardController {
             @RequestParam(required = false) String subtype, 
             @RequestParam(required = false) String set, 
             @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "name") String orderBy,
             @RequestParam(defaultValue = "asc") String direction,
             @RequestParam(required = false) Boolean owned
     ) {
         // Get the filtered cards that are in the authenticated user's sleeves
         CardDto filteredCardsInSleeves = service.getFilteredCardsInMySleeves(owned, id, name, supertype, type, subtype, set, page, orderBy, direction);
-
+        CardServiceImpl.setPageSize(size);
         // Return the filtered cards in sleeves as a ResponseEntity
         return ResponseEntity.ok(filteredCardsInSleeves);
     }
