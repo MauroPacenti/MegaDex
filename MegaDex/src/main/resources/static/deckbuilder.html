@@ -28,6 +28,7 @@
         </nav>
     </header>
     <main>
+
         <section id="deckbuilder">
             <h1>Esplora le carte</h1>
             <form id="search-form1" method="get">
@@ -40,7 +41,7 @@
                 <dl>
                     <li>
                         <div class="menu-container">
-                            <label for="sort-menu">Ordina per:</label>
+                            <label for="sort-menu">Ordina:</label>
                             <select id="sort-menu" >
                                 <option>Seleziona un'opzione</option>
                                 <option value="name">Per nome</option>
@@ -279,20 +280,26 @@
                 <button id="next-page">></button>
             </div>
             </section>
-            <section class="sidebar">
-                <div class="selected-cards">
-                    <h2>Carte Selezionate</h2>
-                <form id="search-form2">
-                    <input type="text" name="card-search" placeholder="Nome Mazzo" required>
-                </form>
-                    <ul id="selected-card-list">
-                        <!-- Elenco delle carte selezionate -->
-                    </ul>
-                </div>
-            
-                <button class="button-deck" type="submit">Salva</button>
-            </section>
-        </section>
+<div id="sidebar">
+    <section id="decks" class="sidebar">
+        <p>mazzi</p>
+    </section>
+    <section class="sidebar">
+        <div class="selected-cards">
+            <h2>Carte Selezionate</h2>
+            <form id="search-form2">
+                <input type="text" name="card-search" placeholder="Nome Mazzo" required>
+            </form>
+            <ul id="selected-card-list">
+                <!-- Elenco delle carte selezionate -->
+            </ul>
+        </div>
+
+        <button class="button-deck" type="submit">Salva</button>
+
+    </section>
+</div>
+
     </main>
     <script src="js/deckbuilder.js" defer></script>
 </body>

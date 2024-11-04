@@ -98,10 +98,11 @@ header nav ul li a:hover {
 }
 
 main {
-    margin-top: 0px;
+    gap: 10px;
     padding: 1em;
-    flex: 1;
     display: flex;
+    margin: 1.5em auto;
+    width:80em;
 }
 
 h1, h2, h3 {
@@ -124,9 +125,7 @@ p {
 section {
     background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
-    margin: 1.5em auto;
     padding: 1.5em;
-    margin-left: 5%;
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -212,7 +211,6 @@ input[type="checkbox"] {
     justify-content: space-around;
     margin-top: 20px;
 }
-
 
 
 .card img {
@@ -302,27 +300,10 @@ input[type="checkbox"] {
 }
 
 
-.card {
-    background: white;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-
-
-}
-
-.card img {
-    
-    max-width: 180px;
-    height: auto;
-}
-
 #deckbuilder {
-    width: 60%;
-    max-width: 990px;
-    min-width: 798px;
-    position: absolute;
+    width: 70%;
+    /*max-width: 990px;*/
+    /*min-width: 798px;*/
     background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     padding: 1.5em;
@@ -333,8 +314,8 @@ input[type="checkbox"] {
     width: 325px;
     list-style-type: none;
     padding: 0;
-    
 }
+
 .selected-cards h2 {
     margin-bottom: 3.7%;
 }
@@ -342,22 +323,21 @@ input[type="checkbox"] {
     margin-bottom: 10px;
     padding: 5px;
     background: #eee;
-    border-radius: 4px; 
+    border-radius: 4px;
 }
 
 
 
-.sidebar .card{
-    margin-top: 10%;
+.card{
+    /*margin-top: 10%;*/
 }
+
+
 
 /* Contenitore per ciascun menu a tendina */
 .menu-container {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
-    display: inline-block;
-
+    justify-content: space-evenly;
 }
 
 /* Etichetta dei menu */
@@ -385,40 +365,12 @@ input[type="checkbox"] {
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-/* Media query per allineare i menu orizzontalmente su schermi più larghi */
-@media (min-width: 768px) {
-    .menu-container {
-        flex-direction: row;
-        align-items: center;
-    }
-
-    .menu-container label {
-        margin-right: 15px;
-        margin-bottom: 0;
-    }
-
-    .menu-container select {
-        width: auto;
-        flex: 1;
-    }
-}
 
 /* Layout container per la sezione del deckbuilder */
 .deck-container {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-}
-
-/* Stile per la sezione sinistra (barra di ricerca e lista di carte) */
-.left-section {
-    width: 75%;
-    padding-right: 20px;
-}
-
-/* Menu a tendina */
-.menu-container {
-    margin-bottom: 15px;
 }
 
 /* Lista delle carte */
@@ -436,7 +388,9 @@ input[type="checkbox"] {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
     width: 180px;
+    height: 242px;
     transition: transform 0.3s ease, box-shadow 0.3s ease; /* Aggiungi transizione per l'ombra */
+
 }
 
 .card:hover {
@@ -446,10 +400,6 @@ input[type="checkbox"] {
 
 
 
-/* Carte selezionate */
-.selected-cards {
-    margin-bottom: 20px;
-}
 
 #selected-card-list {
     list-style-type: none;
@@ -457,7 +407,6 @@ input[type="checkbox"] {
 }
 
 #selected-card-list li {
-    margin-bottom: 10px;
     padding: 5px;
     background: #ffff;
     border-radius: 4px;
@@ -481,15 +430,23 @@ input[type="checkbox"] {
     background-color: #e74c3c;
     transition: 0.3s ease-in;
 }
-.sidebar {
 
-    flex-direction: column;
-    width: 100%;
-    margin-left: 70%;
+#sidebar {
+    display: flex;
+    flex-direction: column;        /* Disposizione verticale */
+    width: 30%;                      /* Occupa il 25% della larghezza */
+    gap: 10px;
+}
+
+.sidebar:first-child {
+    height: 20%;  /* Altezza specifica, ad esempio il 30% della colonna */
+}
+
+.sidebar:last-child {
+    /*flex-direction: column;*/
+    height: 80%;
+    flex: 1;
     background: rgba(255, 255, 255, 0.9);
-    margin-right: 5%;
-    margin-bottom: 40%;
-    position: relative;
 }
 
 dl {

@@ -18,6 +18,7 @@ async function searchCards(page = 1) {
     const params = new URLSearchParams({
         // owned: owned,
         name: name,
+        size: 9,
         type: type,
         subtype: subtype,
         supertype: supertype,
