@@ -25,6 +25,11 @@ public class SlotServiceImpl implements SlotService {
         return slotDao.findAll();
     }
 
+    @Override
+    public List<Slot> getSlotsByDeckId(int deckId) {
+        return slotDao.findByDeckId(deckId);
+    }
+
     // Salva un nuovo slot nel repository
     @Override
     public Slot addSlot(Slot slot) {

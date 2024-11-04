@@ -7,13 +7,10 @@ import com.restart.entity.Slot;
 import com.restart.service.CardServiceImpl;
 import com.restart.service.SlotServiceImpl;
 import com.restart.service.DeckServiceImpl;
+import com.restart.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -26,6 +23,8 @@ public class SlotController {
 	private CardServiceImpl cardService;
 	@Autowired
 	private DeckServiceImpl deckService;
+	@Autowired
+	private UserServiceImpl userService;
 	
 	
 	//Aggiorna o rimuove uno slot
@@ -85,6 +84,20 @@ public class SlotController {
 			addSlot(slot);
 		}
 	return ResponseEntity.ok(slotsRequest);
+	}
+
+	@GetMapping("/deb/slotsByDeck")
+	public ResponseEntity<List<Slot>> getSlotsByDeck(@RequestParam int deckId){
+		try {
+			if (deckService.getDeckById(deckId).get().getUser() != userService.getAuthenticatedUser()
+			&& deckService.getDeckById(deckId).isPresent()){
+				throw new RuntimeException("proprietario non corrispondente");
+			}
+			List<Slot> slots = slotService.getSlotsByDeckId(deckId);
+			return ResponseEntity.ok(slots);
+		} catch (Exception e){
+			return ResponseEntity.noContent().build();
+		}
 	}
 
 }

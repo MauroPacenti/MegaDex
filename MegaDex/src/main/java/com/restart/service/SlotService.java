@@ -8,6 +8,8 @@ import com.restart.entity.Slot;
 @Service
 public interface SlotService {
 	List<Slot> getSlot();
+
+	List<Slot> getSlotsByDeckId(int deckId);
 	
 	Slot addSlot(Slot slot);
 	
