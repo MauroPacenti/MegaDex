@@ -135,7 +135,7 @@ section {
     align-items: center;
 }
 
-form input[type="text"], form input[type="password"], form select {
+form input[type="text"], form input[type="password"], form select, select {
     padding: 10px;
     width: 100%;
     max-width: 400px;
@@ -348,7 +348,7 @@ input[type="checkbox"] {
 }
 
 /* Stile per i dropdown */
-.menu-container select {
+.menu-container select, select {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 25px;
@@ -359,7 +359,7 @@ input[type="checkbox"] {
 }
 
 /* Stilizzazione per migliorare la compatibilità con i dispositivi mobile */
-.menu-container select:focus {
+.menu-container select:focus, select:focus {
     border-color: #007bff;
     outline: none;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -439,12 +439,12 @@ input[type="checkbox"] {
 }
 
 .sidebar:first-child {
-    height: 20%;  /* Altezza specifica, ad esempio il 30% della colonna */
+    height: 25%;  /* Altezza specifica, ad esempio il 30% della colonna */
 }
 
 .sidebar:last-child {
     /*flex-direction: column;*/
-    height: 80%;
+    height: 75%;
     flex: 1;
     background: rgba(255, 255, 255, 0.9);
 }
@@ -458,4 +458,16 @@ dl {
 dl li {
     display: inline-block;
     margin: 0 15px;
+}
+
+.slot {
+    border-radius: 5px;
+    border: 2px solid #2980b9;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+}
+
+.slot p {
+    margin: 0 auto;
 }

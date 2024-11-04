@@ -282,20 +282,24 @@
             </section>
 <div id="sidebar">
     <section id="decks" class="sidebar">
-        <p>mazzi</p>
+        <h2>Mazzi</h2>
+        <select>
+            <option>cane</option>
+        </select>
+        <form id="search-form2">
+            <input type="text" name="card-search" placeholder="nuovo mazzo" required>
+            <button class="button-deck" type="submit">Salva</button>
+        </form>
     </section>
     <section class="sidebar">
         <div class="selected-cards">
-            <h2>Carte Selezionate</h2>
-            <form id="search-form2">
-                <input type="text" name="card-search" placeholder="Nome Mazzo" required>
-            </form>
-            <ul id="selected-card-list">
+
+            <ul class="slot-list">
                 <!-- Elenco delle carte selezionate -->
             </ul>
         </div>
 
-        <button class="button-deck" type="submit">Salva</button>
+
 
     </section>
 </div>

@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
 searchCards();
-});
 
+});
+let slots = [];
 let currentPage = 1; // Pagina corrente iniziale
 
 // Funzione per inviare la richiesta al controller con i parametri dei filtri
@@ -56,11 +57,93 @@ function updateCardList(cards) {
         cardElement.classList.add('card-item');
         cardElement.innerHTML = `
         <div class="card">
-        <img src="${card.img}" alt="" onclick="createSelectedCard('${card.name}')">
+        <img src="${card.img}" alt="" onclick="addSlot('${card.id}')">
         </div>
       `;
         cardListContainer.appendChild(cardElement);
     });
+}
+
+async function searchSlots(deckId) {
+    // event.preventDefault();
+    const params = new URLSearchParams({
+        deckId: deckId,
+    });
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/auth/slotsByDeck?${params.toString()}`);
+        if (!response.ok) {
+            throw new Error("Errore durante il recupero delle carte");
+        }
+        slots = await response.json();
+        updateSlotList(slots);
+    } catch (error) {
+        console.error("Errore:", error);
+    }
+}
+
+// Funzione per mostrare le carte trovate
+function updateSlotList(slots) {
+    const slotListContainer = document.querySelector('.slot-list');
+    slotListContainer.innerHTML = '';
+    let index=0;
+
+    if (!slots.length) {
+        slotListContainer.innerHTML = '<p>Nessuna carta trovata.</p>';
+        return;
+    }
+
+    slots.forEach(slot => {
+        const slotElement = document.createElement('div');
+        slotElement.classList.add('slot-item');
+        slotElement.innerHTML = `
+        <div class="slot" onclick="decreaseQuantity('${index}')">
+        <p>${slot.id.idCard}</p><p>${slot.quantity}</p>
+        </div>
+      `;
+        slotListContainer.appendChild(slotElement);
+        index++;
+    });
+
+}
+
+function decreaseQuantity(index) {
+    slots[index].quantity--;
+    if(slots[index].quantity === 0)
+        slots.splice(index,1);
+    updateSlotList(slots);
+}
+
+function increaseQuantity(index) {
+    slots[index].quantity++;
+
+    updateSlotList(slots);
+}
+
+function addSlot(cardId) {
+    let idDeck = 0;
+    let newSlot = 1;
+    if(slots.length){
+        idDeck = slots[0].id.idDeck;
+        slots.forEach(slot => {
+            if (slot.id.idCard === cardId){
+                slot.quantity++;
+                updateSlotList(slots);
+                newSlot = 0;
+            }
+        })
+    }
+    if(newSlot === 1){
+    let slot = {
+            id:{
+                idCard: cardId,
+                idDeck: idDeck
+            },
+            quantity: 1
+    }
+    slots.push(slot);
+    updateSlotList(slots);
+    }
 }
 
 //funzione per mostrare la carta selezionata

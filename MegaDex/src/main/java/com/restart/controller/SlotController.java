@@ -86,7 +86,7 @@ public class SlotController {
 	return ResponseEntity.ok(slotsRequest);
 	}
 
-	@GetMapping("/deb/slotsByDeck")
+	@GetMapping("/auth/slotsByDeck")
 	public ResponseEntity<List<Slot>> getSlotsByDeck(@RequestParam int deckId){
 		try {
 			if (deckService.getDeckById(deckId).get().getUser() != userService.getAuthenticatedUser()
