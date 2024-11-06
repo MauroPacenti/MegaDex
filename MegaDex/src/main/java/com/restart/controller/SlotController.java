@@ -32,6 +32,17 @@ public class SlotController {
 	@PostMapping("/auth/updateSlot")
 	public ResponseEntity<Slot> addSlot(@RequestBody SlotDto slot) {
 
+		int deckId = slot.getIdDeck();
+		try {
+			if (deckService.getDeckById(deckId).get().getUser() != userService.getAuthenticatedUser()
+					&& deckService.getDeckById(deckId).isPresent()){
+				throw new RuntimeException("proprietario non corrispondente");
+			}
+
+		} catch (Exception e){
+			return ResponseEntity.noContent().build();
+		}
+
 		Slot slotRequest = new Slot();
 		slotRequest.setId(new SlotId());
 
@@ -69,6 +80,16 @@ public class SlotController {
 	//Rimuove uno slot
 	@PostMapping("/auth/removeSlot")
 	public ResponseEntity<String> removeSlot(@RequestBody SlotDto slot){
+		int deckId = slot.getIdDeck();
+		try {
+			if (deckService.getDeckById(deckId).get().getUser() != userService.getAuthenticatedUser()
+					&& deckService.getDeckById(deckId).isPresent()){
+				throw new RuntimeException("proprietario non corrispondente");
+			}
+
+		} catch (Exception e){
+			return ResponseEntity.noContent().build();
+		}
 		SlotId slotRequest = new SlotId();
 		slotRequest.setIdDeck(slot.getIdDeck());
 		slotRequest.setIdCard(slot.getIdCard());
@@ -84,6 +105,16 @@ public class SlotController {
 	//Aggiunge una lista di slot
 	@PostMapping("/auth/saveSlots")
 	public ResponseEntity<List<SlotDto>> addSlots(@RequestBody List<SlotDto> slotsRequest){
+		int deckId = slotsRequest.get(0).getIdDeck();
+		try {
+			if (deckService.getDeckById(deckId).get().getUser() != userService.getAuthenticatedUser()
+					&& deckService.getDeckById(deckId).isPresent()){
+				throw new RuntimeException("proprietario non corrispondente");
+			}
+
+		} catch (Exception e){
+			return ResponseEntity.noContent().build();
+		}
 		List<Slot> oldSlots = slotService.getSlotsByDeckId(slotsRequest.get(0).getIdDeck());
 		for(Slot slot : oldSlots){
 			SlotDto slotDto = new SlotDto();
