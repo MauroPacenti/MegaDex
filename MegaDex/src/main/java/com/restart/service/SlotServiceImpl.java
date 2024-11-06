@@ -2,10 +2,7 @@ package com.restart.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.restart.entity.Card;
-import com.restart.entity.DeckPass;
-import com.restart.entity.Slot;
-import com.restart.entity.Subtype;
+import com.restart.entity.*;
 import org.springframework.stereotype.Service;
 import com.restart.repository.SlotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +35,8 @@ public class SlotServiceImpl implements SlotService {
 
     // Elimina uno slot dal repository
     @Override
-    public void removeSlot(Slot slot) {
-        slotDao.delete(slot);
+    public void removeSlot(SlotId slotId) {
+        slotDao.deleteById(slotId);
     }
 
     //Metodo per eseguire la validazione degli slot delle carte dentro un mazzo

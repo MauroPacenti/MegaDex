@@ -2,6 +2,7 @@ package com.restart.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -24,7 +25,7 @@ public class Slot {
 	private SlotId id;
 	
 	//Oggetto della carta associata allo slot
-	@JsonIgnore
+	@JsonManagedReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("idCard")
 	@JoinColumn(name="id_card", referencedColumnName = "id", nullable = false)

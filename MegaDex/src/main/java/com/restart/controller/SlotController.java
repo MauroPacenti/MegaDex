@@ -1,9 +1,10 @@
 package com.restart.controller;
-
 import java.util.List;
+import com.restart.dto.SlotDto;
 import com.restart.entity.Card;
 import com.restart.entity.Deck;
 import com.restart.entity.Slot;
+import com.restart.entity.SlotId;
 import com.restart.service.CardServiceImpl;
 import com.restart.service.SlotServiceImpl;
 import com.restart.service.DeckServiceImpl;
@@ -29,13 +30,22 @@ public class SlotController {
 	
 	//Aggiorna o rimuove uno slot
 	@PostMapping("/auth/updateSlot")
-	public ResponseEntity<Slot> addSlot(@RequestBody Slot slotRequest){
+	public ResponseEntity<Slot> addSlot(@RequestBody SlotDto slot) {
+
+		Slot slotRequest = new Slot();
+		slotRequest.setId(new SlotId());
 
 		// Recupera il deck dal database usando l'ID passato nella richiesta
-		Deck deck = deckService.getDeckById(slotRequest.getId().getIdDeck())
+		Deck deck = deckService.getDeckById(slot.getIdDeck())
 				.orElseThrow(() -> new RuntimeException("Card not found with ID: " + slotRequest.getId().getIdCard()));;
-		Card card = cardService.getCardById(slotRequest.getId().getIdCard())
+		Card card = cardService.getCardById(slot.getIdCard())
 				.orElseThrow(() -> new RuntimeException("Card not found with ID: " + slotRequest.getId().getIdCard()));
+
+
+		// Associa idCard e idDeck
+		slotRequest.getId().setIdDeck(slot.getIdDeck());
+		slotRequest.getId().setIdCard(slot.getIdCard());
+		slotRequest.setQuantity(slot.getQuantity());
 
 
 		// Associa carta e deck
@@ -50,7 +60,7 @@ public class SlotController {
 		}
 		//altrimenti lo rimuove
 		else {
-			slotService.removeSlot(slotRequest);
+			slotService.removeSlot(slotRequest.getId());
 			return ResponseEntity.ok(slotRequest);
 		}
 
@@ -58,16 +68,10 @@ public class SlotController {
 	
 	//Rimuove uno slot
 	@PostMapping("/auth/removeSlot")
-	public ResponseEntity<String> removeSlot(@RequestBody Slot slotRequest){
-		// Recupera il deck e la carta dal database
-		Deck deck = deckService.getDeckById(slotRequest.getId().getIdDeck())
-				.orElseThrow(() -> new RuntimeException("Deck not found with ID: " + slotRequest.getId().getIdDeck()));;
-		Card card = cardService.getCardById(slotRequest.getId().getIdCard())
-				.orElseThrow(() -> new RuntimeException("Card not found with ID: " + slotRequest.getId().getIdCard()));
-
-		// Associa carta e deck
-		slotRequest.setDeck(deck);
-		slotRequest.setCard(card);
+	public ResponseEntity<String> removeSlot(@RequestBody SlotDto slot){
+		SlotId slotRequest = new SlotId();
+		slotRequest.setIdDeck(slot.getIdDeck());
+		slotRequest.setIdCard(slot.getIdCard());
 
 		try {
             slotService.removeSlot(slotRequest);
@@ -79,8 +83,16 @@ public class SlotController {
 
 	//Aggiunge una lista di slot
 	@PostMapping("/auth/saveSlots")
-	public ResponseEntity<List<Slot>> addSlots(@RequestBody List<Slot> slotsRequest){
-		for(Slot slot : slotsRequest){
+	public ResponseEntity<List<SlotDto>> addSlots(@RequestBody List<SlotDto> slotsRequest){
+		List<Slot> oldSlots = slotService.getSlotsByDeckId(slotsRequest.get(0).getIdDeck());
+		for(Slot slot : oldSlots){
+			SlotDto slotDto = new SlotDto();
+			slotDto.setIdDeck(slot.getId().getIdDeck());
+			slotDto.setIdCard(slot.getId().getIdCard());
+			slotDto.setQuantity(0);
+			removeSlot(slotDto);
+		}
+		for(SlotDto slot : slotsRequest){
 			addSlot(slot);
 		}
 	return ResponseEntity.ok(slotsRequest);
