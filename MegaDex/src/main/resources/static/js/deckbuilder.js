@@ -57,7 +57,7 @@ function updateCardList(cards) {
         cardElement.classList.add('card-item');
         cardElement.innerHTML = `
         <div class="card">
-        <img src="${card.img}" alt="" onclick="addSlot('${card.id}')">
+        <img src="${card.img}" alt="" onclick="addSlot('${card.id}','${card.img}')">
         </div>
       `;
         cardListContainer.appendChild(cardElement);
@@ -101,10 +101,13 @@ function updateSlotList(slots) {
         <p>${slot.id.idCard}</p><p>${slot.quantity}</p>
         </div>
       `;
+        slotElement.style.background = `linear-gradient(rgba(180, 180, 180, 0.6), rgba(180, 180, 180, 0.6)),url(${slot.card.img})`;
         slotListContainer.appendChild(slotElement);
+        slotElement.style.backgroundSize = "100% auto"; // Larghezza al 100%, altezza proporzionale
+        slotElement.style.backgroundPosition = "center 4%"; // Mostra la parte superiore dell'immagine
+        slotElement.style.backgroundRepeat = "no-repeat";
         index++;
     });
-
 }
 
 function decreaseQuantity(index) {
@@ -116,11 +119,10 @@ function decreaseQuantity(index) {
 
 function increaseQuantity(index) {
     slots[index].quantity++;
-
     updateSlotList(slots);
 }
 
-function addSlot(cardId) {
+function addSlot(cardId, cardImg) {
     let idDeck = 0;
     let newSlot = 1;
     if(slots.length){
@@ -139,42 +141,12 @@ function addSlot(cardId) {
                 idCard: cardId,
                 idDeck: idDeck
             },
-            quantity: 1
+        card: {img: cardImg},
+        quantity: 1
     }
     slots.push(slot);
     updateSlotList(slots);
     }
-}
-
-//funzione per mostrare la carta selezionata
-async function selectCard(cardId) {
-    const param = new URLSearchParams({id: cardId})
-    let card;
-    try {
-        const response = await fetch(`http://localhost:8080/api/deb/cardById?${param.toString()}`);
-        if (!response.ok) {
-            throw new Error("Errore durante il recupero della carta");
-        }
-        card = await response.json();
-    } catch (error) {
-        console.error("Errore:", error);
-    }
-
-    const cardContainer = document.querySelector('.card-details');
-    cardContainer.innerHTML = '';
-
-        const cardElement = document.createElement('div');
-        const  slot = getMySleeve(card.id);
-        let quantity;
-
-        if (slot === undefined)
-            quantity = 0;
-        else
-            quantity = slot.quantity;
-
-        cardElement.classList.add('card-item');
-        cardElement.innerHTML = ``;
-    cardContainer.appendChild(cardElement);
 }
 
 
@@ -204,50 +176,6 @@ function getMySleeve(cardId) {
     }
 }
 
-// Funzione per aggiornare la quantità di carte nella collezione
-async function updateQuantity(cardId, change) {
-    // Ottieni il riferimento all'elemento che mostra la quantità
-    const quantityElement = document.getElementById(`quantity-${cardId}`);
-    let currentQuantity = parseInt(quantityElement.textContent);
-
-    // Aggiorna la quantità
-    let newQuantity = currentQuantity + change;
-
-    // Controlla che la quantità non diventi negativa
-    if (newQuantity < 0) {
-        newQuantity = 0;
-    }
-
-    // Aggiorna il testo della quantità nell'interfaccia utente
-    quantityElement.textContent = newQuantity;
-
-    // Prepara i dati da inviare nella chiamata POST
-    const data = {
-        id: {idCard: cardId},
-        quantity: newQuantity
-    };
-
-    // Effettua la chiamata POST per aggiornare la quantità nel server
-    fetch('http://localhost:8080/api/auth/updateSleeve', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Success:', data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-
-    await selectCard(cardId);
-    await searchCards(currentPage);
-}
-
-
 // Event listeners per i bottoni di navigazione
 document.getElementById('prev-page').addEventListener('click', () => {
     if (currentPage > 1) {
@@ -267,7 +195,36 @@ document.getElementById('search-form1').addEventListener('submit', (event) => {
 });
 
 
+//funzione per mostrare la carta selezionata
+async function selectCard(cardId) {
+    const param = new URLSearchParams({id: cardId})
+    let card;
+    try {
+        const response = await fetch(`http://localhost:8080/api/deb/cardById?${param.toString()}`);
+        if (!response.ok) {
+            throw new Error("Errore durante il recupero della carta");
+        }
+        card = await response.json();
+    } catch (error) {
+        console.error("Errore:", error);
+    }
 
+    const cardContainer = document.querySelector('.card-details');
+    cardContainer.innerHTML = '';
+
+    const cardElement = document.createElement('div');
+    const  slot = getMySleeve(card.id);
+    let quantity;
+
+    if (slot === undefined)
+        quantity = 0;
+    else
+        quantity = slot.quantity;
+
+    cardElement.classList.add('card-item');
+    cardElement.innerHTML = ``;
+    cardContainer.appendChild(cardElement);
+}
 
 
     // Funzione per creare l'elemento della carta selezionata
@@ -315,31 +272,5 @@ function createSelectedCard(cardName) {
         selectedCardList.appendChild(li);
     }
 
-    // Event listener per la selezione di una carta
-    // cardList.addEventListener('click', (event) => {
-    //     if (event.target.closest('.card')) {
-    //         const cardElement = event.target.closest('.card');
-    //         const cardName = cardElement.querySelector('p').textContent;
-    //
-    //         // Controlla il limite massimo di 60 carte
-    //         if (cardCount >= 60) {
-    //             alert('Hai raggiunto il limite di 60 carte!');
-    //             return;
-    //         }
-    //
-    //         if (selectedCards[cardName]) {
-    //             // Se la carta esiste già, aggiorna il conteggio
-    //             const li = selectedCardList.querySelector(`li[data-card-name="${cardName}"]`);
-    //             const cardCountElement = li.querySelector('.card-count');
-    //             cardCountElement.textContent = parseInt(cardCountElement.textContent) + 1;
-    //         } else {
-    //             // Se la carta non esiste, la crea
-    //             selectedCards[cardName] = 1;
-    //             createSelectedCard(cardName);
-    //         }
-    //
-    //         cardCount++; // Incrementa il conteggio totale delle carte
-    //     }
-    // });
 
 

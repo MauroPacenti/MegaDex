@@ -470,4 +470,6 @@ dl li {
 
 .slot p {
     margin: 0 auto;
+    font-size: 1.5em;
+    color: #333;
 }
