@@ -3,8 +3,16 @@ searchCards();
 getDecks();
 
 });
+
+
 let slots = [];
-let currentPage = 1; // Pagina corrente iniziale
+let currentPage = 1;
+let idDeck= 0;// Pagina corrente iniziale
+
+const deckSelector = document.querySelector('.deck-option')
+deckSelector.addEventListener('change', function(event){
+    searchSlots(event.target.value);
+})
 
 // Funzione per inviare la richiesta al controller con i parametri dei filtri
 async function searchCards(page = 1) {
