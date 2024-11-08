@@ -284,10 +284,13 @@
     <section id="decks" class="sidebar">
         <h2>Mazzi</h2>
         <form id="search-form2">
+            <label for="deck-id">I miei deck</label>
             <select class="deck-option" id="deck-id">
             </select>
+            <label for="deck-name">Nome</label>
             <input type="text" id="deck-name" placeholder="nome mazzo" required>
-            <input type="text" id="deck-description" placeholder="descrizione">
+            <label for="deck-description">Descrizione</label>
+            <textarea rows="5" id="deck-description" placeholder="descrizione"></textarea>
             <button class="save-deck" type="submit" onclick="saveDeck()">Salva</button>
         </form>
     </section>

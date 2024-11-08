@@ -135,7 +135,7 @@ section {
     align-items: center;
 }
 
-form input[type="text"], form input[type="password"], form select, select {
+form input[type="text"], form input[type="password"], form select, select, #deck-description {
     padding: 10px;
     width: 100%;
     max-width: 400px;
@@ -477,4 +477,9 @@ div.slot-item {
     background-size : 100% auto !important;
     background-position : center 4% !important;
     background-repeat : no-repeat !important;
+}
+
+#deck-description {
+    resize: none;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }

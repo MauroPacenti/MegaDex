@@ -12,10 +12,16 @@ let idDeck= -1;// Pagina corrente iniziale
 const deckSelector = document.querySelector('.deck-option')
 deckSelector.addEventListener('change', async function(event){
     idDeck= event.target.value;
-    let deck = await getDeck();
-    document.getElementById('deck-name').value = deck.name;
-    document.getElementById('deck-description').value = deck.description;
-    searchSlots(event.target.value);
+    if(idDeck != -1){
+        let deck = await getDeck();
+        document.getElementById('deck-name').value = deck.name;
+        document.getElementById('deck-description').value = deck.description;
+        await searchSlots(event.target.value);
+    }
+    else{
+        document.getElementById('deck-name').value = "";
+        document.getElementById('deck-description').value = "";
+    }
 })
 
 // Funzione per inviare la richiesta al controller con i parametri dei filtri
@@ -320,8 +326,8 @@ function loadDecks(decks) {
     optionsElement.innerHTML='';
 
     const defaultOptionElement = document.createElement('option');
-    defaultOptionElement.value = "-1";
-    defaultOptionElement.innerHTML=`<option value="-1">nuovo</option>`;
+    defaultOptionElement.value = -1;
+    defaultOptionElement.innerHTML=`nuovo`;
     optionsElement.appendChild(defaultOptionElement);
 
     decks.forEach(deck => {
