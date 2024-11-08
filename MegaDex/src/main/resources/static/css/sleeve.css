@@ -145,7 +145,7 @@ form input[type="text"], form input[type="password"], form select {
     transition: border 0.3s ease;
 }
 
-form button, .button-deck, .selected-card button {
+form button, .save-deck, .selected-card button {
     padding: 10px 20px;
     background: #2980b9;
     border: none;
@@ -187,7 +187,7 @@ form button:hover, .selected-card button:hover {
     margin: 10px;
 }
 
-.button-deck {
+.save-deck {
     margin-bottom: 10px;
 }
 

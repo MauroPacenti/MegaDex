@@ -7,10 +7,14 @@ getDecks();
 
 let slots = [];
 let currentPage = 1;
-let idDeck= 0;// Pagina corrente iniziale
+let idDeck= -1;// Pagina corrente iniziale
 
 const deckSelector = document.querySelector('.deck-option')
-deckSelector.addEventListener('change', function(event){
+deckSelector.addEventListener('change', async function(event){
+    idDeck= event.target.value;
+    let deck = await getDeck();
+    document.getElementById('deck-name').value = deck.name;
+    document.getElementById('deck-description').value = deck.description;
     searchSlots(event.target.value);
 })
 
@@ -95,7 +99,7 @@ async function searchSlots(deckId) {
 function updateSlotList(slots) {
     const slotListContainer = document.querySelector('.slot-list');
     slotListContainer.innerHTML = '';
-    let index=0;
+    let index = 0;
 
     if (!slots.length) {
         slotListContainer.innerHTML = '<p>Nessuna carta trovata.</p>';
@@ -129,10 +133,10 @@ function increaseQuantity(index) {
 }
 
 function addSlot(cardId, cardImg) {
-    let idDeck = 0;
+    // let idDeck = 0;
     let newSlot = 1;
     if(slots.length){
-        idDeck = slots[0].id.idDeck;
+        // idDeck = slots[0].id.idDeck;
         slots.forEach(slot => {
             if (slot.id.idCard === cardId){
                 slot.quantity++;
@@ -293,8 +297,33 @@ async function getDecks(){
     catch{}
 }
 
+async function getDeck(){
+    const params = new URLSearchParams( {
+        deckId: idDeck
+    });
+    try{
+        const response = await fetch(`http://localhost:8080/api/auth/myDeck?${params.toString()}`,{
+            method: 'POST'
+        })
+        if(!response){
+            throw new Error("Errore durante il recupero dei mazzi");
+        }
+
+        return await response.json();
+
+    }
+    catch{}
+}
+
 function loadDecks(decks) {
     const optionsElement = document.querySelector('.deck-option');
+    optionsElement.innerHTML='';
+
+    const defaultOptionElement = document.createElement('option');
+    defaultOptionElement.value = "-1";
+    defaultOptionElement.innerHTML=`<option value="-1">nuovo</option>`;
+    optionsElement.appendChild(defaultOptionElement);
+
     decks.forEach(deck => {
         const optionElement = document.createElement('option');
         optionElement.value = deck.id;
@@ -305,5 +334,56 @@ function loadDecks(decks) {
         });
     }
 
+async function saveDeck(){
+    event.preventDefault();
+    const name = document.getElementById('deck-name');
+    const description = document.getElementById('deck-description');
+    const id = document.getElementById('deck-id');
+    const params = new URLSearchParams( {
+        name: name.value,
+        description: description.value,
+        deckId: id.value
+    });
+    try{
+        const response = await fetch(`http://localhost:8080/api/auth/saveDeck?${params.toString()}`,{
+            method: 'POST'
+        })
+        if(!response){
+            throw new Error("Errore durante il salvataggio del mazzo");
+        }
+        const deck =  await response.json();
+        await getDecks();
+        description.value=`${deck.description}`;
+        name.value = `${deck.name}`;
+        id.value = `${deck.id}`;
+        idDeck = deck.id;
+        await saveSlot(slots);
+        alert("salvataggio avvenuto con successo");
+    }
+    catch{}
+}
 
+async function saveSlot(slots){
+    let slotDtos = [];
+    slots.forEach(slot =>{
+        let slotDto = {
+            idCard: slot.id.idCard,
+            idDeck: idDeck,
+            quantity: slot.quantity
+        }
+        slotDtos.push(slotDto)
+    })
+    try{
+        response = await fetch(`http://localhost:8080/api/auth/saveSlots`, {
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body:JSON.stringify(slotDtos)
+        })
+        if(!response){
+            throw new Error("errore durante il salvataggio degli slot");
+        }
 
+    }catch{}
+}

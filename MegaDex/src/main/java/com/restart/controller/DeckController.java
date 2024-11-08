@@ -2,14 +2,12 @@ package com.restart.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import com.restart.entity.DeckPass;
 import com.restart.entity.Deck;
@@ -58,19 +56,37 @@ public class DeckController {
 
 		return ResponseEntity.ok(decks);
 	}
-  
-	@PostMapping("/auth/addDeck")
-	public ResponseEntity<Deck> addDeck(@RequestBody Deck deck){
+
+	@PostMapping("/auth/myDeck")
+	public ResponseEntity<Deck> getMyDeck(@RequestParam int deckId) {
 		//Recupera utente autenticato
 		User user = userService.getAuthenticatedUser();
+		//Trova il deck
+		Optional<Deck> deck = deckService.getDeckById(deckId);
+
+		if(deck.isPresent()
+				&& deck.get().getUser() != user){
+			throw new RuntimeException("Id Deck not matching its owner");
+		}
+        return deck.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+  
+	@PostMapping("/auth/saveDeck")
+	public ResponseEntity<Deck> saveDeck(@RequestParam int deckId, @RequestParam String name, @RequestParam String description) {
+		Deck deck = new Deck();
+	  //Recupera utente autenticato
+		User user = userService.getAuthenticatedUser();
 		deck.setUser(user);
+		deck.setName(name);
+		deck.setDescription(description);
 
 		//Associa la lista di slot se esistente
-		if(deckService.getDeckById(deck.getId()).isPresent()){
-				if(deckService.getDeckById(deck.getId()).get().getUser() != user){
+		if(deckService.getDeckById(deckId).isPresent()){
+				if(deckService.getDeckById(deckId).get().getUser() != user){
 					throw new RuntimeException("Id Deck not matching its owner");
 				}
-            deck.setSlots(deckService.getDeckById(deck.getId()).get().getSlots());
+            deck.setSlots(deckService.getDeckById(deckId).get().getSlots());
+			deck.setId(deckId);
         }
 
         //Salva il deck

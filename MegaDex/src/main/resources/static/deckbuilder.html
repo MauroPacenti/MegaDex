@@ -283,12 +283,12 @@
 <div id="sidebar">
     <section id="decks" class="sidebar">
         <h2>Mazzi</h2>
-        <select class="deck-option">
-            <option>nuovo</option>
-        </select>
         <form id="search-form2">
-            <input type="text" name="card-search" placeholder="nuovo mazzo" required>
-            <button class="button-deck" type="submit">Salva</button>
+            <select class="deck-option" id="deck-id">
+            </select>
+            <input type="text" id="deck-name" placeholder="nome mazzo" required>
+            <input type="text" id="deck-description" placeholder="descrizione">
+            <button class="save-deck" type="submit" onclick="saveDeck()">Salva</button>
         </form>
     </section>
     <section class="sidebar">

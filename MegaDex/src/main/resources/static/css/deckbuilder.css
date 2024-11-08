@@ -147,7 +147,7 @@ form input[type="text"], form input[type="password"], form select, select {
     transition: border 0.3s ease;
 }
 
-form button, .button-deck {
+form button, .save-deck {
     padding: 10px 20px;
     background: #2980b9;
     border: none;
@@ -158,7 +158,7 @@ form button, .button-deck {
     transition: 0.3s ease;
 }
 
-form button:hover, .button-deck:hover, #search-form1 button:hover {
+form button:hover, .save-deck:hover, #search-form1 button:hover {
     background: #1abc9c;
 }
 
@@ -191,7 +191,7 @@ form button:hover, .button-deck:hover, #search-form1 button:hover {
 }
 
 
-.button-deck{
+.save-deck{
     margin-bottom: 10px;
 }
 
@@ -439,12 +439,12 @@ input[type="checkbox"] {
 }
 
 .sidebar:first-child {
-    height: 25%;  /* Altezza specifica, ad esempio il 30% della colonna */
+    height: min-content;  /* Altezza specifica, ad esempio il 30% della colonna */
 }
 
 .sidebar:last-child {
     /*flex-direction: column;*/
-    height: 75%;
+    height: auto;
     flex: 1;
     background: rgba(255, 255, 255, 0.9);
 }
