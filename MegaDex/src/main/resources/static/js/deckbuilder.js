@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 searchCards();
+getDecks();
 
 });
 let slots = [];
@@ -103,9 +104,6 @@ function updateSlotList(slots) {
       `;
         slotElement.style.background = `linear-gradient(rgba(180, 180, 180, 0.6), rgba(180, 180, 180, 0.6)),url(${slot.card.img})`;
         slotListContainer.appendChild(slotElement);
-        slotElement.style.backgroundSize = "100% auto"; // Larghezza al 100%, altezza proporzionale
-        slotElement.style.backgroundPosition = "center 4%"; // Mostra la parte superiore dell'immagine
-        slotElement.style.backgroundRepeat = "no-repeat";
         index++;
     });
 }
@@ -270,6 +268,33 @@ function createSelectedCard(cardName) {
 
         // Aggiunge la carta selezionata alla lista
         selectedCardList.appendChild(li);
+    }
+
+async function getDecks(){
+    try{
+        const response = await fetch('http://localhost:8080/api/auth/myDecks',{
+            method: 'POST'
+        })
+            if(!response){
+                throw new Error("Errore durante il recupero dei mazzi");
+            }
+            const decks =  await response.json();
+            loadDecks(decks);
+
+    }
+    catch{}
+}
+
+function loadDecks(decks) {
+    const optionsElement = document.querySelector('.deck-option');
+    decks.forEach(deck => {
+        const optionElement = document.createElement('option');
+        optionElement.value = deck.id;
+        optionElement.innerHTML=`
+            ${deck.name}
+            `;
+        optionsElement.appendChild(optionElement);
+        });
     }
 
 

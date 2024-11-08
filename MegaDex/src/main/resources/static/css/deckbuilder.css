@@ -303,7 +303,7 @@ input[type="checkbox"] {
 #deckbuilder {
     width: 70%;
     /*max-width: 990px;*/
-    /*min-width: 798px;*/
+    min-height: 1020px;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     padding: 1.5em;
@@ -337,7 +337,7 @@ input[type="checkbox"] {
 /* Contenitore per ciascun menu a tendina */
 .menu-container {
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
 }
 
 /* Etichetta dei menu */
@@ -472,4 +472,9 @@ dl li {
     margin: 0 auto;
     font-size: 1.5em;
     color: #333;
+}
+div.slot-item {
+    background-size : 100% auto !important;
+    background-position : center 4% !important;
+    background-repeat : no-repeat !important;
 }

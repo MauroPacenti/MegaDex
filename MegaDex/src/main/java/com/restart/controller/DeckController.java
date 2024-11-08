@@ -47,6 +47,17 @@ public class DeckController {
 
       return ResponseEntity.ok(decks);
   }
+
+	@PostMapping("/auth/myDecks")
+	public ResponseEntity<List<Deck>> getMyDecks() {
+		//Recupera utente autenticato
+		User user = userService.getAuthenticatedUser();
+
+		//Trova i deck associati all'utente
+		List<Deck> decks = deckService.getDecksByUser(user);
+
+		return ResponseEntity.ok(decks);
+	}
   
 	@PostMapping("/auth/addDeck")
 	public ResponseEntity<Deck> addDeck(@RequestBody Deck deck){
